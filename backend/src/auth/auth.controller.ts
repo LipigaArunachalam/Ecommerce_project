@@ -29,8 +29,8 @@ export class AuthController {
 
         res.cookie("access_token", accessToken, {
             httpOnly: true,
-            secure: false,
-            sameSite: "lax",
+            secure: true,
+            sameSite: "none",
             maxAge: 24 * 60 * 60 * 1000,
         });
 
@@ -58,8 +58,8 @@ export class AuthController {
 
         res.cookie("access_token", accessToken, {
             httpOnly: true,
-            secure: false,
-            sameSite: "lax",
+            secure: true,
+            sameSite: "none",
             maxAge: 24 * 60 * 60 * 1000,
         });
 
@@ -84,8 +84,8 @@ export class AuthController {
         // res.clearCookie("access_token");
         res.clearCookie("access_token", {
             httpOnly: true,
-            secure: false,
-            sameSite: "lax",
+            secure: true,
+            sameSite: "none",
             path: "/",  
         });
         return { message: "User logged out successfully" };
@@ -110,8 +110,8 @@ export class AuthController {
 
         res.cookie("access_token", tokens, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'lax',
+            secure: true,
+            sameSite: 'none',
             maxAge: 24 * 60 * 60 * 1000,
         });
 
