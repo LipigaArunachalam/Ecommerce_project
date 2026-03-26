@@ -178,8 +178,8 @@ export class UserController {
         status: 200,
         description: "Products loaded",
     })
-    searchProduct(@Param("prod") prod: string, @Query("limit") limit: number, @Query("page") offset: number): Promise<any> {
-        return this.userService.searchProduct(prod, limit, offset);
+    searchProduct(@Param("prod") prod: string, @Query("limit") limit: number, @Query("page") offset: number, @Query("min") min?: number, @Query("max") max?: number): Promise<any> {
+        return this.userService.searchProduct(prod, limit, offset, min, max);
     }
 
     @Patch(":uid/edit")
