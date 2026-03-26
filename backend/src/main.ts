@@ -9,9 +9,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
   app.enableCors({
-  origin: "http://localhost:5173",
-  credentials: true,
-});
+    origin: "https://ecommerce-project-hazel-tau.vercel.app/",
+    credentials: true,
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -21,11 +21,11 @@ async function bootstrap() {
       },
     }),
   );
-  
 
-  
+
+
   app.setGlobalPrefix('api');
-  
+
   const config = new DocumentBuilder()
     .setTitle('Ecommerce API')
     .setDescription('API documentation')
@@ -39,7 +39,12 @@ async function bootstrap() {
 
   SwaggerModule.setup('my-api', app, document);
 
-  await app.listen(process.env.PORT ?? 3000);
+  // await app.listen(process.env.PORT ?? 3000);
+  const PORT = process.env.PORT || 3000;
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 
 }
 bootstrap();
