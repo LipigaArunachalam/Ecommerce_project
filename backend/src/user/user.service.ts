@@ -321,17 +321,26 @@ export class UserService {
         };
     }
 
-    async searchProduct(prod: string, limit: number, offset: number) {
+    async searchProduct(prod: string, limit: number, offset: number, min?: number, max?: number) {
+        const matchQuery: any = {
+            is_deleted: false,
+            $or: [
+                { product_name: { $regex: prod, $options: "i" } },
+                { product_category_name: { $regex: prod, $options: "i" } }
+            ]
+        };
+
+        if (min !== undefined && max !== undefined) {
+             const minNum = Number(min);
+             const maxNum = Number(max);
+             if (!isNaN(minNum) && !isNaN(maxNum)) {
+                 matchQuery.price = { $gte: minNum, $lte: maxNum };
+             }
+        }
+
         const data = await this.ProductModel.aggregate([
             {
-                $match: {
-                    is_deleted: false,
-                    //  $text: { $search: prod }
-                    $or: [
-                        { product_name: { $regex: prod, $options: "i" } },
-                        { product_category_name: { $regex: prod, $options: "i" } }
-                    ]
-                }
+                $match: matchQuery
             },
             {
                 $skip: Number(offset),
