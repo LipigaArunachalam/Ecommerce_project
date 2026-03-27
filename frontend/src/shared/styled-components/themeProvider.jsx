@@ -1,6 +1,7 @@
 import React, { createContext, useMemo, useState } from 'react';
-import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider as MuiThemeProvider, createTheme, alpha } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import GlobalStyles from '@mui/material/GlobalStyles';
 import { palette } from './palette';
 import { typography } from './typography';
 
@@ -28,6 +29,24 @@ export const ThemeProvider = ({ children }) => {
     <ColorModeContext.Provider value={{ toggleTheme, mode }}>
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
+        <GlobalStyles
+          styles={{
+            '*::-webkit-scrollbar': {
+              width: '8px',
+              height: '8px',
+            },
+            '*::-webkit-scrollbar-track': {
+              background: theme.palette.background.default,
+            },
+            '*::-webkit-scrollbar-thumb': {
+              background: alpha(theme.palette.primary.main, 0.4),
+              borderRadius: '10px',
+            },
+            '*::-webkit-scrollbar-thumb:hover': {
+              background: alpha(theme.palette.primary.main, 0.6),
+            },
+          }}
+        />
         {children}
       </MuiThemeProvider>
     </ColorModeContext.Provider>

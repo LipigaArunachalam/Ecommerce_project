@@ -41,8 +41,8 @@ export const ProductCardLayout = ({
   }
 
   return (
-    <Container maxWidth={false} sx={{ px: { xs: 2, sm: 3, md: 5 }, py: 2 }}>
-      <Grid container spacing={3} sx={{ mx: -1.5 }}>
+    <Container maxWidth={false}>
+      <Grid container spacing={3} sx={{ mx: -1.5, justifyContent: 'space-evenly' }}>
         {data.length > 0 ? (
           data.map((product, index) => (
             <Grid
