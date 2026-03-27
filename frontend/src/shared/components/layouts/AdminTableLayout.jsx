@@ -22,7 +22,7 @@ import {
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   borderRadius: '16px',
   boxShadow: 'none',
-  border: `1px solid ${alpha(theme.palette.divider, 0.4)}`,
+  // border: `1px solid ${alpha(theme.palette.divider, 0.4)}`,
   backgroundColor: alpha(theme.palette.background.paper, 0.3),
   backdropFilter: 'blur(12px)',
 }));
@@ -39,7 +39,7 @@ const HeaderCell = styled(TableCell)(({ theme }) => ({
   fontSize: '0.75rem',
   textTransform: 'uppercase',
   padding: theme.spacing(2.5, 3),
-  borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
+  // borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
   letterSpacing: '0.06em',
   fontFamily: '"Public Sans", sans-serif',
 }));
@@ -57,7 +57,7 @@ const StyledRow = styled(TableRow)(({ theme }) => ({
 
 const DataCell = styled(TableCell)(({ theme }) => ({
   padding: theme.spacing(2.5, 3),
-  borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
+  // borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
   fontSize: '0.9rem',
   fontFamily: '"Public Sans", sans-serif',
   fontWeight: 500,
