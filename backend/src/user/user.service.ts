@@ -85,7 +85,7 @@ export class UserService {
                     Installation: '$cust_pay.payment_installments',
                     estimated_delivery: '$cust_orders.order_estimated_delivery_date',
                     order_at: '$cust_orders.order_purchase_timestamp',
-                    product_name: '$product_details.product_category_name',
+                    product_name: '$product_details.product_name',
                     product_img: '$product_details.product_image_url',
                 }
             },
