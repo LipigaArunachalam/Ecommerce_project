@@ -39,7 +39,7 @@ export class AuthService {
             refresh_expires: expires,
         });
         //await this.updateRefreshToken(user._id.toString(), refreshToken);
-        return { accessToken, refreshToken };
+        return { accessToken, refreshToken,userId, email };
     }
 
     async login(loginDto: VerifyUserDto) {

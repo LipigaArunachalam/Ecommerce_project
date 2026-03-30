@@ -33,10 +33,13 @@ export const SignUpForm = () => {
       return;
     }
     try {
-      await signup(data).unwrap();
+      const res = await signup(data).unwrap();
       setSnackMessage('Signup successful');
       setSnackSeverity('success');
       setSnackOpen(true);
+      localStorage.setItem('user_id',res.user_id)
+      localStorage.setItem('email',res.email)
+      localStorage.setItem('role',"customer")
 
       setTimeout(() => {
         navigate('/products');
