@@ -46,8 +46,8 @@ export class UserController {
         status: 200,
         description: 'User details fetched successfully',
     })
-    getDetails(@Req() req) {
-        return this.userService.getDetails(req.user.user_id);
+    getDetails(@Req() res) {
+        return this.userService.getDetails(res.user.user_id);
     }
 
 
