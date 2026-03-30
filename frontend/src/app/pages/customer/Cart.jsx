@@ -28,8 +28,8 @@ export const Cart = () => {
 
   const [isBuyAllDialogOpen, setIsBuyAllDialogOpen] = useState(false);
 
-  const [remove] = useRemoveFromCartMutation();
-  const [updateCart] = useUpdateCartMutation();
+  const [remove, { isLoading: removeLoading }] = useRemoveFromCartMutation();
+  const [updateCart, { isLoading: updateLoading }] = useUpdateCartMutation();
 
   const { data, isLoading, error } = useCartQuery({
     page: page + 1,
@@ -138,8 +138,9 @@ export const Cart = () => {
               color: 'error.dark',
               '&:hover': { bgcolor: (theme) => alpha(theme.palette.error.main, 0.16) }
             }}
+            disabled={removeLoading}
           >
-            Remove
+            {removeLoading ? 'Removing...' : 'Remove'}
           </Button>
           <Button
             size="small"
@@ -147,8 +148,9 @@ export const Cart = () => {
             color="primary"
             onClick={() => handleBuy(row)}
             sx={{ textTransform: 'none', fontWeight: 700, boxShadow: 'none' }}
+            disabled={updateLoading}
           >
-            Buy Now
+            {updateLoading ? 'Buying...' : 'Buy Now'}
           </Button>
         </Stack>
       ),
@@ -310,6 +312,7 @@ export const Cart = () => {
         description="Are you sure you want to remove this item from your cart?"
         confirmText="Remove"
         cancelText="Cancel"
+        isLoading={removeLoading}
       />
       <SnackBar
         open={snackOpen}

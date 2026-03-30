@@ -23,9 +23,9 @@ import {
 } from '@mui/material';
 
 export const Products = () => {
-  const [deleteProduct] = useDeleteProductMutation();
-  const [updateProduct] = useUpdateProductMutation();
-  const [addProduct] = useAddProductMutation();
+  const [deleteProduct, { isLoading: deleteLoading }] = useDeleteProductMutation();
+  const [updateProduct, { isLoading: updateLoading }] = useUpdateProductMutation();
+  const [addProduct, { isLoading: addLoading }] = useAddProductMutation();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -464,6 +464,7 @@ export const Products = () => {
         onConfirm={handleConfirmDelete}
         title="Delete Product"
         description="Are you sure you want to delete this product? This action cannot be undone."
+        isLoading={deleteLoading}
       />
 
       <SnackBar

@@ -57,6 +57,7 @@ export const CustomerLayout = () => {
             theme.palette.mode === 'light'
               ? '0 1px 0 rgba(79, 124, 130, 0.08), 0 4px 24px rgba(79, 124, 130, 0.06)'
               : '0 1px 0 rgba(184, 227, 233, 0.06), 0 4px 24px rgba(0, 0, 0, 0.2)',
+          zIndex: (theme) => theme.zIndex.appBar,
         }}
       >
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', px: { xs: 2, sm: 4 }, minHeight: 64 }}>

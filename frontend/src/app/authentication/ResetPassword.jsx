@@ -32,7 +32,7 @@ export const ResetPassword = () => {
     formState: { errors },
   } = useForm();
 
-  const [resetPassword] = useResetPasswordMutation();
+  const [resetPassword, { isLoading: resetPasswordLoading }] = useResetPasswordMutation();
 
   const textStyle = {
     '& .MuiInputBase-input': {
@@ -128,8 +128,9 @@ export const ResetPassword = () => {
                 size="large"
                 fullWidth
                 sx={{ py: 1.5, borderRadius: 2 }}
+                disabled={resetPasswordLoading}
               >
-                Reset Password
+                {resetPasswordLoading ? 'Resetting...' : 'Reset Password'}
               </Button>
             </Stack>
           </form>

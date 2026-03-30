@@ -29,7 +29,7 @@ export const Order = () => {
     uid: uid,
   });
 
-  const [cancelOrder] = useCancelOrderMutation();
+  const [cancelOrder, { isLoading: cancelLoading }] = useCancelOrderMutation();
 
   const handleCancel = (row) => {
     setSelectedOrder(row);
@@ -185,6 +185,7 @@ export const Order = () => {
         description="Are you sure you want to cancel this order?"
         confirmText="Yes, Cancel"
         cancelText="No, Keep"
+        isLoading={cancelLoading}
       />
       <SnackBar
         open={snackOpen}

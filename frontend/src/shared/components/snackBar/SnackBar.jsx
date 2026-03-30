@@ -8,6 +8,7 @@ export const SnackBar = ({ open, message, severity = 'info', handleClose }) => {
       autoHideDuration={3000}
       onClose={handleClose}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      sx={{ zIndex: 100000, mt: 8 }}
     >
       <Alert onClose={handleClose} severity={severity} variant="filled" sx={{ width: '100%' }}>
         {message}

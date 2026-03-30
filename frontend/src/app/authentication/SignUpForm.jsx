@@ -23,7 +23,7 @@ export const SignUpForm = () => {
   const [snackMessage, setSnackMessage] = useState('');
   const [snackSeverity, setSnackSeverity] = useState('error');
 
-  const [signup] = useSignupMutation();
+  const [signup, { isLoading: signupLoading }] = useSignupMutation();
 
   const handleSignup = async (data) => {
     if (data.password !== data.confirmPassword) {
@@ -138,8 +138,8 @@ export const SignUpForm = () => {
               helperText={errors.state?.message}
             />
 
-            <AuthButton type="submit" variant="contained" fullWidth size="large">
-              Sign Up
+            <AuthButton type="submit" variant="contained" fullWidth size="large" disabled={signupLoading}>
+              {signupLoading ? 'Signing up...' : 'Sign Up'}
             </AuthButton>
 
             <Typography variant="body2" align="center" color="#637381">
