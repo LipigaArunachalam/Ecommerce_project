@@ -138,9 +138,8 @@ export const Cart = () => {
               color: 'error.dark',
               '&:hover': { bgcolor: (theme) => alpha(theme.palette.error.main, 0.16) }
             }}
-            disabled={removeLoading}
           >
-            {removeLoading ? 'Removing...' : 'Remove'}
+            remove
           </Button>
           <Button
             size="small"
@@ -148,9 +147,8 @@ export const Cart = () => {
             color="primary"
             onClick={() => handleBuy(row)}
             sx={{ textTransform: 'none', fontWeight: 700, boxShadow: 'none' }}
-            disabled={updateLoading}
           >
-            {updateLoading ? 'Buying...' : 'Buy Now'}
+            Buy Now
           </Button>
         </Stack>
       ),
@@ -260,11 +258,12 @@ export const Cart = () => {
 
   return (
     <Container maxWidth="xl" sx={{ py: 3 }}>
-      <Stack direction="row" justifyContent="flex-end" mb={3}>
+      <Stack direction="row" justifyContent={{ xs: 'center', sm: 'flex-end' }} mb={3}>
         <Button
           variant="contained"
           onClick={handleBuyAll}
           sx={{
+            width: { xs: '100%', sm: 'auto' },
             px: 3,
             py: 1,
             borderRadius: 2,
@@ -319,7 +318,7 @@ export const Cart = () => {
         message={snackMessage}
         severity={snackSeverity}
         handleClose={() => setSnackOpen(false)}
-      />
+    />
     </Container>
   );
 };

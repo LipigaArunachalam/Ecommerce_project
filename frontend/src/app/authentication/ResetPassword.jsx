@@ -12,6 +12,7 @@ import {
   TextField,
 } from '@mui/material';
 import { SnackBar, useResetPasswordMutation } from '../../shared';
+import { StyledCard, StyledTextField, AuthButton } from '../../shared/styled-components/StyledComponents';
 
 export const ResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -24,8 +25,6 @@ export const ResetPassword = () => {
   const [snackMessage, setSnackMessage] = useState('');
   const [snackSeverity, setSnackSeverity] = useState('error');
 
-  // const [error,setError] = useState("");
-
   const {
     register,
     handleSubmit,
@@ -34,108 +33,76 @@ export const ResetPassword = () => {
 
   const [resetPassword, { isLoading: resetPasswordLoading }] = useResetPasswordMutation();
 
-  const textStyle = {
-    '& .MuiInputBase-input': {
-      color: 'black',
-    },
-    '& .MuiInputLabel-root': {
-      color: 'black',
-    },
-    '& .MuiInputLabel-root.Mui-focused': {
-      color: 'black',
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: 'black',
-        borderWidth: '1px', 
-      },
-      '&:hover fieldset': {
-        borderColor: 'black',
-        borderWidth: '2px', 
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: 'black',
-        borderWidth: '2px', 
-      },
-    },
-  };
-
   const handleReset = async (data) => {
     try {
-      //const res = await API.post("/auth/reset-password", {newPassword:data.newPassword,email,token});
-      const res = await resetPassword({ email, newPassword: data.newPassword, token });
+      await resetPassword({ email, newPassword: data.newPassword, token }).unwrap();
 
-      setSnackMessage('Password resetted successfully');
+      setSnackMessage('Password reset successfully');
       setSnackSeverity('success');
       setSnackOpen(true);
 
-      console.log(res);
       setTimeout(() => {
         navigate('/login');
       }, 1000);
     } catch (err) {
       console.error(err);
-      setSnackMessage('Failed to reset');
+      setSnackMessage('Failed to reset password. Please try again.');
       setSnackSeverity('error');
       setSnackOpen(true);
     }
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 7 }}>
-      <Card
-        sx={{
-          p: 4,
-          borderRadius: 12,
-          background: 'rgba(229, 216, 234, 0.92)',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
-        }}
-      >
-        <CardContent>
-          <Typography variant="h4" align="center" fontWeight="bold">
-            RESET PASSWORD
-          </Typography>
-          <form onSubmit={handleSubmit(handleReset)}>
-            <Stack spacing={3} sx={{ mt: 2 }}>
-              {/* {error && <p className="error">{error}</p>} */}
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 7, px: 2 }}>
+      <StyledCard sx={{ width: '100%', maxWidth: 480 }}>
+        <Typography variant="h3" align="center" color="primary.main" fontWeight={800} gutterBottom>
+          Reset Password
+        </Typography>
+        <Typography variant="body2" align="center" color="text.secondary" sx={{ mb: 4 }}>
+          Enter your new password below to reset your account.
+        </Typography>
+        <form onSubmit={handleSubmit(handleReset)}>
+          <Stack spacing={3}>
+            <StyledTextField
+              type="password"
+              label="New Password"
+              variant="outlined"
+              fullWidth
+              {...register('newPassword', { 
+                required: 'Password is required',
+                minLength: { value: 5, message: 'Minimum 5 characters' }
+              })}
+              error={!!errors.newPassword}
+              helperText={errors.newPassword?.message}
+            />
 
-              <TextField
-                type="password"
-                label="New Password"
-                variant="outlined"
-                fullWidth
-                placeholder="Enter new password"
-                {...register('newPassword', { required: 'password is needed' })}
-                error={!!errors.newPassword}
-                helperText={errors.newPassword?.message}
-                sx={textStyle}
-              />
-              <TextField
-                type="password"
-                label="New Password"
-                variant="outlined"
-                fullWidth
-                placeholder="Enter new password"
-                {...register('newPassword', { required: 'password is needed' })}
-                error={!!errors.newPassword}
-                helperText={errors.newPassword?.message}
-                sx={textStyle}
-              />
-
-              <Button
-                variant="contained"
-                type="submit"
-                size="large"
-                fullWidth
-                sx={{ py: 1.5, borderRadius: 2 }}
-                disabled={resetPasswordLoading}
+            <AuthButton
+              variant="contained"
+              type="submit"
+              size="large"
+              fullWidth
+              disabled={resetPasswordLoading}
+            >
+              {resetPasswordLoading ? 'Resetting...' : 'Reset Password'}
+            </AuthButton>
+            
+            <Box sx={{ textAlign: 'center', mt: 2 }}>
+              <MuiLink 
+                onClick={() => navigate('/login')}
+                sx={{ 
+                  cursor: 'pointer',
+                  color: 'primary.main', 
+                  fontWeight: 700, 
+                  textDecoration: 'none', 
+                  '&:hover': { textDecoration: 'underline' } 
+                }}
               >
-                {resetPasswordLoading ? 'Resetting...' : 'Reset Password'}
-              </Button>
-            </Stack>
-          </form>
-        </CardContent>
-      </Card>
+                Return to login
+              </MuiLink>
+            </Box>
+          </Stack>
+        </form>
+      </StyledCard>
       <SnackBar
         open={snackOpen}
         message={snackMessage}

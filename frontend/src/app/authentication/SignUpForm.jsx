@@ -115,7 +115,7 @@ export const SignUpForm = () => {
               helperText={errors.confirmPassword?.message}
             />
 
-            <Stack direction="row" spacing={2}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
               <StyledTextField
                 label="Zip Code"
                 variant="outlined"

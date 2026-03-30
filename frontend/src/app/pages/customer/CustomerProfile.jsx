@@ -22,7 +22,9 @@ import {
   DialogActions,
   Button,
   TextField,
+  useMediaQuery,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { DeleteDialog } from '../../../shared';
 
 export const CustomerProfile = () => {
@@ -186,7 +188,13 @@ export const CustomerProfile = () => {
   return (
     <Box sx={{ width: '100%' }}>
       <ProfileLayout data={data} isLoading={isLoading} isError={!!error} fields={fields} actions={<Button variant="contained" color="primary" onClick={handleEditOpen}>Edit Profile</Button>} />
-      <Dialog open={openEdit} onClose={handleClose} maxWidth="sm" fullWidth>
+      <Dialog 
+        open={openEdit} 
+        onClose={handleClose} 
+        maxWidth="sm" 
+        fullWidth
+        fullScreen={useMediaQuery(useTheme().breakpoints.down('sm'))}
+      >
         <DialogTitle>Edit Profile</DialogTitle>
 
         <DialogContent
@@ -205,6 +213,7 @@ export const CustomerProfile = () => {
             value={formData.email}
             onChange={handleChange}
             fullWidth
+            sx={{mt:2}}
           />
 
           <Typography variant="h6" sx={{ mt: 2 }}>
@@ -265,12 +274,12 @@ export const CustomerProfile = () => {
           />
         </DialogContent>
 
-        <DialogActions>
-          <Button variant="contained" onClick={handleClose}>
+        <DialogActions sx={{ p: 2, flexDirection: { xs: 'column-reverse', sm: 'row' }, gap: { xs: 1.5, sm: 0 } }}>
+          <Button variant="contained" onClick={handleClose} sx={{ marginLeft:{xs:1}, width: { xs: '100%', sm: 'auto' } }}>
             Cancel
           </Button>
 
-          <Button variant="contained" onClick={handleSubmit} disabled={isAdding}>
+          <Button variant="contained" onClick={handleSubmit} disabled={isAdding} sx={{ width: { xs: '100%', sm: 'auto' } }}>
             {isAdding ? 'Saving...' : 'Save'}
           </Button>
         </DialogActions>

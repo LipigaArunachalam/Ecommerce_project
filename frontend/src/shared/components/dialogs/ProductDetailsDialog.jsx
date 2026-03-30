@@ -10,17 +10,22 @@ import {
   Stack,
   Divider,
   Grid,
+  useMediaQuery
 } from '@mui/material';
-import { alpha } from '@mui/material/styles';
+import { alpha, useTheme } from '@mui/material/styles';
 import { ShoppingCart, ShoppingBag } from '@mui/icons-material';
 
 export const ProductDetailsDialog = ({ open, onClose, product, onAddToCart, onBuy, isLoading }) => {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   if (!product) return null;
 
   return (
     <Dialog 
       open={open} 
       onClose={onClose} 
+      fullScreen={fullScreen}
       fullWidth 
       maxWidth="sm"
       PaperProps={{
@@ -42,8 +47,9 @@ export const ProductDetailsDialog = ({ open, onClose, product, onAddToCart, onBu
             <Box
               component="img"
               sx={{
-                width: 300,
-                height: 300,
+                width: { xs: '100%', sm: 300 },
+                height: { xs: 'auto', sm: 300 },
+                aspectRatio: { xs: '1/1', sm: 'auto' },
                 borderRadius: 2,
                 objectFit: 'cover',
                 background: (theme) => alpha(theme.palette.primary.main, 0.05),
@@ -128,14 +134,15 @@ export const ProductDetailsDialog = ({ open, onClose, product, onAddToCart, onBu
           </Grid> */}
         </Grid>
       </DialogContent>
-      <DialogActions sx={{ p: 2, justifyContent: 'space-between' }}>
-        <Button onClick={onClose} variant="contained" color="error">
+      <DialogActions sx={{ p: 2, justifyContent: 'space-between', flexDirection: { xs: 'column-reverse', sm: 'row' }, gap: { xs: 2, sm: 0 } }}>
+        <Button onClick={onClose} variant="contained" color="error" sx={{ marginLeft:{xs:1}, width: { xs: '100%', sm: 'auto' } }}>
           Close
         </Button>
-        <Stack direction="row" spacing={2}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ width: { xs: '100%', sm: 'auto' } }}>
           <Button
             variant="contained"
             startIcon={<ShoppingCart />}
+            sx={{ width: { xs: '100%', sm: 'auto' } }}
             onClick={() => {
               onAddToCart(product.product_id);
               onClose();
@@ -146,6 +153,7 @@ export const ProductDetailsDialog = ({ open, onClose, product, onAddToCart, onBu
           <Button
             variant="contained"
             startIcon={<ShoppingBag />}
+            sx={{ width: { xs: '100%', sm: 'auto' } }}
             onClick={() => {
               onBuy(product);
               onClose();

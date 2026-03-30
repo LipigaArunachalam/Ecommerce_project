@@ -10,10 +10,14 @@ import {
   Stack,
   Alert,
   CircularProgress,
+  useMediaQuery,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useBuyProductMutation, useCustomerDetailsQuery, useAddAddressMutation } from '../../utils';
 
 export const BuyProductDialog = ({ open, onClose, product, onSuccess }) => {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [buyProduct, { isLoading: isBuying, isSuccess, isError, error, reset }] = useBuyProductMutation();
   const [addAddress, { isLoading: isAddingAddress }] = useAddAddressMutation();
   const isLoading = isBuying || isAddingAddress;
@@ -130,6 +134,7 @@ export const BuyProductDialog = ({ open, onClose, product, onSuccess }) => {
     <Dialog 
       open={open} 
       onClose={handleClose} 
+      fullScreen={fullScreen}
       fullWidth 
       maxWidth="xs"
       PaperProps={{
@@ -247,8 +252,8 @@ export const BuyProductDialog = ({ open, onClose, product, onSuccess }) => {
         </Stack>
       </DialogContent>
 
-      <DialogActions>
-        <Button onClick={handleClose} variant="contained" color="error" disabled={isLoading}>
+      <DialogActions sx={{ p: 2, flexDirection: { xs: 'column-reverse', sm: 'row' }, gap: { xs: 1.5, sm: 0 } }}>
+        <Button onClick={handleClose} variant="contained" color="error" disabled={isLoading} sx={{marginLeft:{xs:1}, width: { xs: '100%', sm: 'auto' } }}>
           Cancel
         </Button>
 
@@ -257,6 +262,7 @@ export const BuyProductDialog = ({ open, onClose, product, onSuccess }) => {
           variant="contained"
           disabled={isLoading || isSuccess}
           startIcon={isLoading ? <CircularProgress size={20} /> : null}
+          sx={{ width: { xs: '100%', sm: 'auto' } }}
         >
           {isLoading ? 'Processing...' : 'Confirm'}
         </Button>
