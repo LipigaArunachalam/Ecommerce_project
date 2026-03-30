@@ -6,7 +6,10 @@ import {
   Typography,
   Link as MuiLink,
   Box,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { SnackBar, useLoginMutation } from '../../shared';
 import { StyledCard, StyledTextField, AuthButton } from '../../shared/styled-components/StyledComponents';
 import { useDispatch } from 'react-redux';
@@ -25,6 +28,7 @@ export const LoginForm = () => {
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
   const [snackSeverity, setSnackSeverity] = useState('error');
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -93,12 +97,24 @@ export const LoginForm = () => {
 
             <StyledTextField
               label="Password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               variant="outlined"
               fullWidth
               {...register('password', { required: 'Password is required' })}
               error={!!errors.password}
               helperText={errors.password?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
 
             <Box sx={{ textAlign: 'right' }}>

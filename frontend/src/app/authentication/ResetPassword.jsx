@@ -10,7 +10,10 @@ import {
   Button,
   Link as MuiLink,
   TextField,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { SnackBar, useResetPasswordMutation } from '../../shared';
 
 export const ResetPassword = () => {
@@ -23,6 +26,9 @@ export const ResetPassword = () => {
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
   const [snackSeverity, setSnackSeverity] = useState('error');
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // const [error,setError] = useState("");
 
@@ -61,8 +67,13 @@ export const ResetPassword = () => {
   };
 
   const handleReset = async (data) => {
+    if (data.newPassword !== data.confirmPassword) {
+      setSnackMessage('Passwords do not match');
+      setSnackSeverity('error');
+      setSnackOpen(true);
+      return;
+    }
     try {
-      //const res = await API.post("/auth/reset-password", {newPassword:data.newPassword,email,token});
       const res = await resetPassword({ email, newPassword: data.newPassword, token });
 
       setSnackMessage('Password resetted successfully');
@@ -100,7 +111,7 @@ export const ResetPassword = () => {
               {/* {error && <p className="error">{error}</p>} */}
 
               <TextField
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 label="New Password"
                 variant="outlined"
                 fullWidth
@@ -109,17 +120,41 @@ export const ResetPassword = () => {
                 error={!!errors.newPassword}
                 helperText={errors.newPassword?.message}
                 sx={textStyle}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <TextField
-                type="password"
-                label="New Password"
+                type={showConfirmPassword ? 'text' : 'password'}
+                label="Confirm Password"
                 variant="outlined"
                 fullWidth
-                placeholder="Enter new password"
-                {...register('newPassword', { required: 'password is needed' })}
-                error={!!errors.newPassword}
-                helperText={errors.newPassword?.message}
+                placeholder="Confirm new password"
+                {...register('confirmPassword', { required: 'confirmation is needed' })}
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword?.message}
                 sx={textStyle}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
 
               <Button
