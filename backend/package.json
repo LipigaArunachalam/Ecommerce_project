@@ -62,15 +62,21 @@
 
     "@nestjs/swagger": "^11.2.6",
 
+    "@types/express-session": "^1.18.2",
+
     "bcrypt": "^6.0.0",
 
     "class-transformer": "^0.5.1",
 
     "class-validator": "^0.14.4",
 
+    "connect-mongodb-session": "^5.0.0",
+
     "cookie-parser": "^1.4.7",
 
     "dayjs": "^1.11.20",
+
+    "express-session": "^1.19.0",
 
     "mapped-types": "^0.0.1",
 

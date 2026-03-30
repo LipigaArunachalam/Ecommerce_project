@@ -64,11 +64,15 @@ export const CustomerProfile = () => {
 
   const [formData, setFormData] = useState({
     email: '',
+    currentPassword: '',
+    newPassword: '',
   });
 
   const handleEditOpen = () => {
     setFormData({
       email: data?.email || '',
+      currentPassword: '',
+      newPassword: '',
     });
 
     setOpenEdit(true);
@@ -146,23 +150,29 @@ export const CustomerProfile = () => {
   const handleSubmit = async () => {
     try {
       const uid = localStorage.getItem('user_id');
-      console.log(formData);
-      if (
-        newAddress.address_line == '' ||
-        newAddress.city == '' ||
-        newAddress.state == '' ||
-        newAddress.zip_code == ''
-      ) {
-        setSnackMessage('Fill all the feilds');
+      
+      const { address_line, city, state, zip_code } = newAddress;
+      const isAnyAddressFieldFilled = address_line || city || state || zip_code;
+      const isAllAddressFieldsFilled = address_line && city && state && zip_code;
+
+      if (isAnyAddressFieldFilled && !isAllAddressFieldsFilled) {
+        setSnackMessage('Please fill all address fields');
         setSnackSeverity('error');
         setSnackOpen(true);
         return;
       }
+
+      const updatedAddresses = isAllAddressFieldsFilled 
+        ? [...data.addresses, newAddress] 
+        : data.addresses;
+
       await editProfile({
         uid: uid,
         data: {
           email: formData.email,
-          addresses: [...data.addresses, newAddress],
+          addresses: updatedAddresses,
+          currentPassword: formData.currentPassword,
+          newPassword: formData.newPassword,
         },
       }).unwrap();
       setNewAddress({
@@ -203,6 +213,24 @@ export const CustomerProfile = () => {
             label="Email"
             name="email"
             value={formData.email}
+            onChange={handleChange}
+            fullWidth
+          />
+
+          <TextField
+            label="Current Password"
+            name="currentPassword"
+            type="password"
+            value={formData.currentPassword}
+            onChange={handleChange}
+            fullWidth
+          />
+
+          <TextField
+            label="New Password"
+            name="newPassword"
+            type="password"
+            value={formData.newPassword}
             onChange={handleChange}
             fullWidth
           />
