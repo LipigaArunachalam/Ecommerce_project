@@ -9,6 +9,8 @@ import {
 } from '@mui/material';
 import { SnackBar, useLoginMutation } from '../../shared';
 import { StyledCard, StyledTextField, AuthButton } from '../../shared/styled-components/StyledComponents';
+import { useDispatch } from 'react-redux';
+import { baseApi } from '../../shared';
 
 export const LoginForm = () => {
   const {
@@ -23,6 +25,7 @@ export const LoginForm = () => {
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
   const [snackSeverity, setSnackSeverity] = useState('error');
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const role = localStorage.getItem('role');
@@ -51,6 +54,7 @@ export const LoginForm = () => {
       setSnackMessage('Login successful');
       setSnackSeverity('success');
       setSnackOpen(true);
+      dispatch(baseApi.util.resetApiState());
 
       setTimeout(() => {
         if (role === 'seller') navigate('/seller/seller-profile');

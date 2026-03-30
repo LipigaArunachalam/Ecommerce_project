@@ -100,7 +100,7 @@ export const SignUpForm = () => {
               type="password"
               variant="outlined"
               fullWidth
-              {...register('password', { required: 'Password is required' })}
+              {...register('password', { required: 'Password is required' , minLength : {value:5 ,message:'Minimum 5 characters'}})}
               error={!!errors.password}
               helperText={errors.password?.message}
             />

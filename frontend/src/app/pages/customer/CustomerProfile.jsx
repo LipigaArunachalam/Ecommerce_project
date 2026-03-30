@@ -23,6 +23,7 @@ import {
   Button,
   TextField,
 } from '@mui/material';
+import { DeleteDialog } from '../../../shared';
 
 export const CustomerProfile = () => {
   const { data, error, isLoading } = useCustomerDetailsQuery();
@@ -32,6 +33,8 @@ export const CustomerProfile = () => {
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
   const [snackSeverity, setSnackSeverity] = useState('success');
+  const [isDeleteDialogOpen,setIsDeleteDialogOpen]=useState(false);
+  const [deleteAddressId, setDeleteAddressId] =useState('');
 
   const lastAddress = data?.addresses?.[data.addresses.length - 1];
   const addressDisplay = lastAddress
@@ -118,15 +121,21 @@ export const CustomerProfile = () => {
     }
   };
 
-  const handleDeleteAddress = async (id) => {
+  const handleRemove = async(id)=>{
+      setDeleteAddressId(id)
+      setIsDeleteDialogOpen(true)
+  }
+
+  const handleDeleteAddress = async () => {
     const uid = localStorage.getItem('user_id');
 
     try {
-      await deleteAddress({ uid, data: { _id: id } }).unwrap();
-
+      await deleteAddress({ uid, data: { _id: deleteAddressId } }).unwrap();
+      setIsDeleteDialogOpen(false)
       setSnackMessage('Address deleted');
       setSnackSeverity('success');
       setSnackOpen(true);
+      setDeleteAddressId('');
     } catch (err) {
       setSnackMessage('Delete failed');
       setSnackSeverity('error');
@@ -217,7 +226,7 @@ export const CustomerProfile = () => {
                 {addr.address_line}, {addr.city}, {addr.state} - {addr.zip_code}
               </Typography>
 
-              <Button size="small" color="error" onClick={() => handleDeleteAddress(addr._id)}>
+              <Button size="small" color="error" onClick={() => handleRemove(addr._id)}>
                 Delete
               </Button>
             </Box>
@@ -401,6 +410,16 @@ export const CustomerProfile = () => {
         severity={snackSeverity}
         handleClose={() => setSnackOpen(false)}
       />
+
+      <DeleteDialog
+              open={isDeleteDialogOpen}
+              onClose={() => setIsDeleteDialogOpen(false)}
+              onConfirm={handleDeleteAddress}
+              title="Remove Address"
+              description="Are you sure you want to remove this address?"
+              confirmText="Remove"
+              cancelText="Cancel"
+            />
     </Box>
   );
 };
