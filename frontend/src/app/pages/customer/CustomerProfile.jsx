@@ -8,7 +8,7 @@ import {
   SnackBar,
   ProfileLayout,
 } from '../../../shared';
-import { Email, LocationOn, Home, Map } from '@mui/icons-material';
+import { Email, LocationOn, Home, Map, Visibility, VisibilityOff } from '@mui/icons-material';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { BarChart } from '@mui/x-charts/BarChart';
 import {
@@ -22,6 +22,8 @@ import {
   DialogActions,
   Button,
   TextField,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import { DeleteDialog } from '../../../shared';
 
@@ -67,6 +69,9 @@ export const CustomerProfile = () => {
     currentPassword: '',
     newPassword: '',
   });
+
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   const handleEditOpen = () => {
     setFormData({
@@ -152,8 +157,18 @@ export const CustomerProfile = () => {
       const uid = localStorage.getItem('user_id');
       
       const { address_line, city, state, zip_code } = newAddress;
-      const isAnyAddressFieldFilled = address_line || city || state || zip_code;
-      const isAllAddressFieldsFilled = address_line && city && state && zip_code;
+      const isAnyAddressFieldFilled = Boolean(address_line || city || state || zip_code);
+      const isAllAddressFieldsFilled = Boolean(address_line && city && state && zip_code);
+
+      const hasEmailChanged = formData.email !== (data?.email || '');
+      const isPasswordChangeAttempted = Boolean(formData.currentPassword && formData.newPassword);
+
+      if (!hasEmailChanged && !isPasswordChangeAttempted && !isAnyAddressFieldFilled) {
+        setSnackMessage('No data entered to save');
+        setSnackSeverity('info');
+        setSnackOpen(true);
+        return;
+      }
 
       if (isAnyAddressFieldFilled && !isAllAddressFieldsFilled) {
         setSnackMessage('Please fill all address fields');
@@ -220,19 +235,43 @@ export const CustomerProfile = () => {
           <TextField
             label="Current Password"
             name="currentPassword"
-            type="password"
+            type={showCurrentPassword ? 'text' : 'password'}
             value={formData.currentPassword}
             onChange={handleChange}
             fullWidth
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                    edge="end"
+                  >
+                    {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
           <TextField
             label="New Password"
             name="newPassword"
-            type="password"
+            type={showNewPassword ? 'text' : 'password'}
             value={formData.newPassword}
             onChange={handleChange}
             fullWidth
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    edge="end"
+                  >
+                    {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
           <Typography variant="h6" sx={{ mt: 2 }}>
