@@ -33,8 +33,8 @@ export const CustomerProfile = () => {
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
   const [snackSeverity, setSnackSeverity] = useState('success');
-  const [isDeleteDialogOpen,setIsDeleteDialogOpen]=useState(false);
-  const [deleteAddressId, setDeleteAddressId] =useState('');
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [deleteAddressId, setDeleteAddressId] = useState('');
 
   const lastAddress = data?.addresses?.[data.addresses.length - 1];
   const addressDisplay = lastAddress
@@ -121,9 +121,9 @@ export const CustomerProfile = () => {
     }
   };
 
-  const handleRemove = async(id)=>{
-      setDeleteAddressId(id)
-      setIsDeleteDialogOpen(true)
+  const handleRemove = async (id) => {
+    setDeleteAddressId(id)
+    setIsDeleteDialogOpen(true)
   }
 
   const handleDeleteAddress = async () => {
@@ -220,13 +220,25 @@ export const CustomerProfile = () => {
                 border: '1px solid',
                 borderColor: 'divider',
                 borderRadius: 2,
+                position: 'relative',
               }}
             >
               <Typography variant="body2">
                 {addr.address_line}, {addr.city}, {addr.state} - {addr.zip_code}
               </Typography>
 
-              <Button size="small" color="error" onClick={() => handleRemove(addr._id)}>
+              <Button
+                size="small"
+                color="error"
+                onClick={() => handleRemove(addr._id)}
+                sx={{
+                  position: 'absolute', 
+                  top: 8,
+                  right: 8,
+                  minWidth: 'auto',
+                  padding: '2px 6px',
+                }}
+              >
                 Delete
               </Button>
             </Box>
@@ -412,14 +424,14 @@ export const CustomerProfile = () => {
       />
 
       <DeleteDialog
-              open={isDeleteDialogOpen}
-              onClose={() => setIsDeleteDialogOpen(false)}
-              onConfirm={handleDeleteAddress}
-              title="Remove Address"
-              description="Are you sure you want to remove this address?"
-              confirmText="Remove"
-              cancelText="Cancel"
-            />
+        open={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDeleteAddress}
+        title="Remove Address"
+        description="Are you sure you want to remove this address?"
+        confirmText="Remove"
+        cancelText="Cancel"
+      />
     </Box>
   );
 };
