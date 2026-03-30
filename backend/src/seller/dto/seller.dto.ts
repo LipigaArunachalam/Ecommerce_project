@@ -36,22 +36,6 @@ export class CreateProductDto {
   @IsNumber()
   product_qty: number;
 
-  @ApiProperty({ example: 500 })
-  @IsNumber()
-  product_weight_g: number;
-
-  @ApiProperty({ example: 20 })
-  @IsNumber()
-  product_length_cm: number;
-
-  @ApiProperty({ example: 10 })
-  @IsNumber()
-  product_height_cm: number;
-
-  @ApiProperty({ example: 15 })
-  @IsNumber()
-  product_width_cm: number;
-
   @ApiProperty({ example: 15 })
   @IsNumber()
   price: number;
