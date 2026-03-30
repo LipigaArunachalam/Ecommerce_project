@@ -13,7 +13,7 @@ class Address {
   state: string;
 
   @Prop()
-  zip_code: string;
+  zip_code: number;
 }
 
 const AddressSchema = SchemaFactory.createForClass(Address);

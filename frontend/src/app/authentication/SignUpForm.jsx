@@ -33,10 +33,13 @@ export const SignUpForm = () => {
       return;
     }
     try {
-      await signup(data).unwrap();
+      const res = await signup(data).unwrap();
       setSnackMessage('Signup successful');
       setSnackSeverity('success');
       setSnackOpen(true);
+      localStorage.setItem('user_id',res.user_id)
+      localStorage.setItem('email',res.email)
+      localStorage.setItem('role',"customer")
 
       setTimeout(() => {
         navigate('/products');
@@ -97,7 +100,7 @@ export const SignUpForm = () => {
               type="password"
               variant="outlined"
               fullWidth
-              {...register('password', { required: 'Password is required' })}
+              {...register('password', { required: 'Password is required' , minLength : {value:5 ,message:'Minimum 5 characters'}})}
               error={!!errors.password}
               helperText={errors.password?.message}
             />

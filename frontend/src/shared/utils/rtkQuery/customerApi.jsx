@@ -4,7 +4,7 @@ export const customerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     customerDetails: builder.query({
       query: () => ({
-        url: '/users',
+        url: `/users`,
         method: 'GET',
       }),
       providesTags: ['customers'],
