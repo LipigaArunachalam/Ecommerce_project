@@ -24,7 +24,7 @@ export class AuthController {
         @Body(ValidationPipe) signupDto: CreateUserDto,
         @Res({ passthrough: true }) res: Response,
     ) {
-        const { accessToken, refreshToken } =
+        const { accessToken, refreshToken, userId, email } =
             await this.authService.signUp(signupDto);
 
         res.cookie("access_token", accessToken, {
@@ -36,7 +36,8 @@ export class AuthController {
 
         return {
             message: "User registered successfully",
-            refresh_token: refreshToken,
+            user_id: userId,
+            email:email
         };
     }
 
