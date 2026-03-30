@@ -154,7 +154,7 @@ export class UserService {
             product_id,
             seller_id: product.seller_id,
             price: product.price,
-            freight_value: 10,
+            freight_value:  Math.max(10, Math.min(25, product.price * 0.03)),
             shipping_limit_date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
             address: finalAddress,
             is_deleted: false
