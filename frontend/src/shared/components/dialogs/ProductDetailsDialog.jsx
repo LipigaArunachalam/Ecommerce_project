@@ -14,7 +14,7 @@ import {
 import { alpha } from '@mui/material/styles';
 import { ShoppingCart, ShoppingBag } from '@mui/icons-material';
 
-export const ProductDetailsDialog = ({ open, onClose, product, onAddToCart, onBuy }) => {
+export const ProductDetailsDialog = ({ open, onClose, product, onAddToCart, onBuy, isLoading }) => {
   if (!product) return null;
 
   return (
@@ -42,7 +42,7 @@ export const ProductDetailsDialog = ({ open, onClose, product, onAddToCart, onBu
             <Box
               component="img"
               sx={{
-                width: '100%',
+                width: 300,
                 height: 300,
                 borderRadius: 2,
                 objectFit: 'cover',
@@ -100,7 +100,7 @@ export const ProductDetailsDialog = ({ open, onClose, product, onAddToCart, onBu
             </Stack>
           </Grid>
 
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Divider sx={{ my: 1 }} />
             <Typography variant="subtitle2" gutterBottom sx={{ mt: 1, fontWeight: 700 }}>
               Physical Specifications
@@ -125,7 +125,7 @@ export const ProductDetailsDialog = ({ open, onClose, product, onAddToCart, onBu
                 <Typography variant="body2">{product.product_width_cm}cm</Typography>
               </Grid>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
       </DialogContent>
       <DialogActions sx={{ p: 2, justifyContent: 'space-between' }}>
@@ -141,7 +141,7 @@ export const ProductDetailsDialog = ({ open, onClose, product, onAddToCart, onBu
               onClose();
             }}
           >
-            Add to Cart
+            {isLoading ? 'Adding...' : 'Add to Cart'}
           </Button>
           <Button
             variant="contained"

@@ -50,8 +50,8 @@ export const CustomerProfile = () => {
     },
   ];
 
-  const [addAddress] = useAddAddressMutation();
-  const [deleteAddress] = useDeleteAddressMutation();
+  const [addAddress, { isLoading: isAdding }] = useAddAddressMutation();
+  const [deleteAddress, { isLoading: isDeleting }] = useDeleteAddressMutation();
 
   const [newAddress, setNewAddress] = useState({
     address_line: '',
@@ -270,8 +270,8 @@ export const CustomerProfile = () => {
             Cancel
           </Button>
 
-          <Button variant="contained" onClick={handleSubmit}>
-            Save
+          <Button variant="contained" onClick={handleSubmit} disabled={isAdding}>
+            {isAdding ? 'Saving...' : 'Save'}
           </Button>
         </DialogActions>
       </Dialog>

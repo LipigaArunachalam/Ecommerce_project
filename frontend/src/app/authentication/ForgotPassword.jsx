@@ -12,7 +12,7 @@ export const ForgotPassword = () => {
     formState: { errors },
   } = useForm();
 
-  const [forgotPassword] = useForgotPasswordMutation();
+  const [forgotPassword, { isLoading: forgotPasswordLoading }] = useForgotPasswordMutation();
 
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
@@ -59,8 +59,8 @@ export const ForgotPassword = () => {
               helperText={errors.email?.message}
             />
 
-            <AuthButton variant="contained" type="submit" fullWidth size="large">
-              Send Reset Link
+            <AuthButton variant="contained" type="submit" fullWidth size="large" disabled={forgotPasswordLoading}>
+              {forgotPasswordLoading ? 'Sending...' : 'Send Reset Link'}
             </AuthButton>
 
             <Box sx={{ textAlign: 'center' }}>

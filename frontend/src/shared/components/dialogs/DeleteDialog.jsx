@@ -16,6 +16,7 @@ export const DeleteDialog = ({
   description = 'Are you sure want to delete?',
   confirmText = 'Delete',
   cancelText = 'Cancel',
+  isLoading,
 }) => {
   return (
     <Dialog
@@ -33,6 +34,7 @@ export const DeleteDialog = ({
         <Button
           variant="contained"
           onClick={onConfirm}
+          disabled={isLoading}
           sx={{
             fontWeight: 600,
             borderRadius: 1.5,
@@ -41,11 +43,12 @@ export const DeleteDialog = ({
             '&:hover': { bgcolor: 'error.dark' },
           }}
         >
-          {confirmText}
+          {isLoading ? 'loading...' : confirmText}
         </Button>
         <Button
           variant="contained"
           onClick={onClose}
+          disabled={isLoading}
           sx={{
             color: 'text.primary',
             borderColor: 'divider',

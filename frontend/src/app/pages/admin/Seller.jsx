@@ -35,7 +35,7 @@ export const Sellers = () => {
   const [sellerToDelete, setSellerToDelete] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
-  const [deleteSeller] = useDeleteSellerMutation();
+  const [deleteSeller, { isLoading: deleteLoading }] = useDeleteSellerMutation();
   const { data, isLoading, isError } = useGetAllSellerQuery({
     page: page + 1,
     limit: rowsPerPage,
@@ -254,6 +254,7 @@ export const Sellers = () => {
         description="Are you sure you want to delete this seller?"
         confirmText="Delete Seller"
         cancelText="Cancel"
+        isLoading={deleteLoading}
       />
       <SnackBar
         open={snackbar.open}

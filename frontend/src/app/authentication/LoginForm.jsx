@@ -19,7 +19,7 @@ export const LoginForm = () => {
     formState: { errors },
   } = useForm();
 
-  const [login] = useLoginMutation();
+  const [login, { isLoading: loginLoading }] = useLoginMutation();
   const navigate = useNavigate();
 
   const [snackOpen, setSnackOpen] = useState(false);
@@ -56,11 +56,11 @@ export const LoginForm = () => {
       setSnackOpen(true);
       dispatch(baseApi.util.resetApiState());
 
-      setTimeout(() => {
+      // setTimeout(() => {
         if (role === 'seller') navigate('/seller/seller-profile');
         if (role === 'customer') navigate('/customer/search');
         if (role === 'admin') navigate('/admin');
-      }, 1000);
+      // }, 1000);
     } catch (err) {
       console.error(err);
       setSnackMessage('Login failed');
@@ -117,8 +117,9 @@ export const LoginForm = () => {
               type="submit"
               size="large"
               fullWidth
+              disabled={loginLoading}
             >
-              Login
+              {loginLoading ? 'Logging in...' : 'Login'}
             </AuthButton>
 
             <Typography variant="body2" align="center" color="#637381">

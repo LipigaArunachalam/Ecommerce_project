@@ -68,7 +68,7 @@ export const Catalog = ({ searchTerm, selectedCategory, filters }) => {
     { skip: !!searchTerm || !selectedCategory }
   );
 
-  const [addToCart] = useAddToCartMutation();
+  const [addToCart, { isLoading: addToCartLoading }] = useAddToCartMutation();
 
   const handleBuy = (product) => {
     const userRole = localStorage.getItem('role');
@@ -147,6 +147,7 @@ export const Catalog = ({ searchTerm, selectedCategory, filters }) => {
         product={selectedProduct}
         onAddToCart={handleAddToCart}
         onBuy={handleBuy}
+        isLoading={addToCartLoading}
       />
 
       <BuyProductDialog
