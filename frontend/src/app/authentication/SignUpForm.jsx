@@ -145,7 +145,7 @@ export const SignUpForm = () => {
               }}
             />
 
-            <Stack direction="row" spacing={2}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
               <StyledTextField
                 label="Zip Code"
                 variant="outlined"

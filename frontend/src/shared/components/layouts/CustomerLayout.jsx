@@ -60,7 +60,7 @@ export const CustomerLayout = () => {
           zIndex: (theme) => theme.zIndex.appBar,
         }}
       >
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', px: { xs: 2, sm: 4 }, minHeight: 64 }}>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', px: { xs: 1, sm: 4 }, minHeight: 64 }}>
           {/* Brand */}
           <Typography
             variant="h6"
@@ -91,7 +91,8 @@ export const CustomerLayout = () => {
                 color="inherit"
                 startIcon={item.icon}
                 sx={(theme) => ({
-                  px: 1.5,
+                  px: { xs: 1, sm: 1.5 },
+                  minWidth: { xs: 40, sm: 'auto' },
                   py: 0.75,
                   borderRadius: '10px',
                   textTransform: 'none',
@@ -112,7 +113,9 @@ export const CustomerLayout = () => {
                   },
                 })}
               >
-                {item.text}
+                <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>
+                  {item.text}
+                </Box>
               </Button>
             ))}
 

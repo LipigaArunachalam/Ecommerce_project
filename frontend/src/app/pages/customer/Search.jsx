@@ -62,8 +62,8 @@ export const Search = () => {
             InputProps={{
               sx: { 
                 borderRadius: '16px',
-                height: 64,
-                fontSize: '1.1rem',
+                height: { xs: 56, sm: 64 },
+                fontSize: { xs: '1rem', sm: '1.1rem' },
                 fontFamily: '"Public Sans", sans-serif',
                 fontWeight: 500,
                 boxShadow: theme.palette.mode === 'light' 
@@ -93,8 +93,8 @@ export const Search = () => {
                       textTransform: 'none',
                       fontWeight: 700,
                       fontFamily: '"Public Sans", sans-serif',
-                      height: 44,
-                      px: 3,
+                      height: { xs: 40, sm: 44 },
+                      px: {xs: 2, sm: 3},
                     }}
                   >
                     Search
@@ -134,7 +134,7 @@ export const Search = () => {
                 fontSize: '1rem',
                 color: 'text.primary',
                 borderColor: alpha(theme.palette.divider, 0.8),
-                px: { xs: 3, md: 4 },
+                px: { xs: 2, sm: 3, md: 4 },
                 display: 'flex',
                 gap: 1.5,
                 transition: 'all 0.3s',

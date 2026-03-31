@@ -23,7 +23,7 @@ export const DeleteDialog = ({
       open={open}
       onClose={onClose}
       PaperProps={{
-        sx: { borderRadius: 2, minWidth: 320, p: 1 },
+        sx: { borderRadius: 2, minWidth: { xs: 280, sm: 320 }, p: 1 },
       }}
     >
       <DialogTitle sx={{ fontWeight: 700, fontSize: '1.125rem' }}>{title}</DialogTitle>

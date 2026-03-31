@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { SnackBar, useResetPasswordMutation } from '../../shared';
+import { StyledCard, StyledTextField, AuthButton } from '../../shared/styled-components/StyledComponents';
 
 export const ResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -40,32 +41,6 @@ export const ResetPassword = () => {
 
   const [resetPassword, { isLoading: resetPasswordLoading }] = useResetPasswordMutation();
 
-  const textStyle = {
-    '& .MuiInputBase-input': {
-      color: 'black',
-    },
-    '& .MuiInputLabel-root': {
-      color: 'black',
-    },
-    '& .MuiInputLabel-root.Mui-focused': {
-      color: 'black',
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: 'black',
-        borderWidth: '1px', 
-      },
-      '&:hover fieldset': {
-        borderColor: 'black',
-        borderWidth: '2px', 
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: 'black',
-        borderWidth: '2px', 
-      },
-    },
-  };
-
   const handleReset = async (data) => {
     if (data.newPassword !== data.confirmPassword) {
       setSnackMessage('Passwords do not match');
@@ -76,17 +51,16 @@ export const ResetPassword = () => {
     try {
       const res = await resetPassword({ email, newPassword: data.newPassword, token });
 
-      setSnackMessage('Password resetted successfully');
+      setSnackMessage('Password reset successfully');
       setSnackSeverity('success');
       setSnackOpen(true);
 
-      console.log(res);
       setTimeout(() => {
         navigate('/login');
       }, 1000);
     } catch (err) {
       console.error(err);
-      setSnackMessage('Failed to reset');
+      setSnackMessage('Failed to reset password. Please try again.');
       setSnackSeverity('error');
       setSnackOpen(true);
     }
@@ -94,14 +68,7 @@ export const ResetPassword = () => {
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 7 }}>
-      <Card
-        sx={{
-          p: 4,
-          borderRadius: 12,
-          background: 'rgba(229, 216, 234, 0.92)',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
-        }}
-      >
+      <StyledCard sx={{ width: '100%', maxWidth: 480 }}>
         <CardContent>
           <Typography variant="h4" align="center" fontWeight="bold">
             RESET PASSWORD
@@ -157,20 +124,34 @@ export const ResetPassword = () => {
                 }}
               />
 
-              <Button
-                variant="contained"
-                type="submit"
-                size="large"
-                fullWidth
-                sx={{ py: 1.5, borderRadius: 2 }}
-                disabled={resetPasswordLoading}
+            <AuthButton
+              variant="contained"
+              type="submit"
+              size="large"
+              fullWidth
+              disabled={resetPasswordLoading}
+            >
+              {resetPasswordLoading ? 'Resetting...' : 'Reset Password'}
+            </AuthButton>
+            
+            <Box sx={{ textAlign: 'center', mt: 2 }}>
+              <MuiLink 
+                onClick={() => navigate('/login')}
+                sx={{ 
+                  cursor: 'pointer',
+                  color: 'primary.main', 
+                  fontWeight: 700, 
+                  textDecoration: 'none', 
+                  '&:hover': { textDecoration: 'underline' } 
+                }}
               >
-                {resetPasswordLoading ? 'Resetting...' : 'Reset Password'}
-              </Button>
-            </Stack>
-          </form>
+                Return to login
+              </MuiLink>
+            </Box>
+          </Stack>
+        </form>
         </CardContent>
-      </Card>
+      </StyledCard>
       <SnackBar
         open={snackOpen}
         message={snackMessage}

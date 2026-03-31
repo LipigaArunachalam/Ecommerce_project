@@ -20,6 +20,7 @@ import {
   DialogActions,
   TextField,
   alpha,
+  useMediaQuery,
 } from '@mui/material';
 
 export const Products = () => {
@@ -75,10 +76,20 @@ export const Products = () => {
     {
       key: 'product_category_name',
       label: 'product category',
+      render: (row) => (
+        <Typography variant="body2" fontWeight={600} sx={{ textTransform: 'capitalize' }}>
+          {row.product_category_name?.replace(/_/g, ' ')}
+        </Typography>
+      ),
     },
     {
       key: 'product_name',
       label: 'Product name',
+      render: (row) => (
+        <Typography variant="body2" fontWeight={500}>
+          {row.product_name}
+        </Typography>
+      ),
     },
     {
       key: 'product_image_url',
@@ -229,16 +240,18 @@ export const Products = () => {
 
   return (
     <Box>
-      <Box display="flex" justifyContent="space-between" sx={{ mb: 2 }}>
-        <Typography variant="h4">
-          <strong>Products</strong>
-        </Typography>
-        <Button variant="contained" color="primary" onClick={handleOpenAdd}>
-          Add Product
-        </Button>
-      </Box>
       <AdminTableLayout
-        // title="Products"
+        title="Products"
+        headerActions={
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={handleOpenAdd}
+            sx={{ px: 4, py: 1.2, borderRadius: 2, fontWeight: 700 }}
+          >
+            Add Product
+          </Button>
+        }
         columns={columns}
         data={data || []}
         page={0}
@@ -259,10 +272,11 @@ export const Products = () => {
         onClose={handleClose}
         fullWidth
         maxWidth="sm"
+        fullScreen={useMediaQuery('(max-width:600px)')}
         PaperProps={{
           sx: {
-            borderRadius: 3,
-            p: 1,
+            borderRadius: { xs: 0, sm: 3 },
+            p: { xs: 1, sm: 2 },
           },
         }}
       >
@@ -282,7 +296,7 @@ export const Products = () => {
             component="form"
             sx={{
               display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
+              gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
               gap: 2,
               mt: 1,
             }}
@@ -374,7 +388,7 @@ export const Products = () => {
           </Box>
         </DialogContent>
 
-        <DialogActions sx={{ px: 3, pb: 4, pt: 2 }}>
+        <DialogActions sx={{ px: 3, pb: 4, pt: 2, flexDirection: { xs: 'column-reverse', sm: 'row' }, gap: { xs: 2, sm: 0 } }}>
           <Button
             onClick={handleClose}
             variant="outlined"
@@ -383,8 +397,10 @@ export const Products = () => {
             sx={{
               textTransform: 'none',
               fontWeight: 700,
+              marginLeft:{xs:1},
               px: 4,
               borderRadius: 1.5,
+              width: { xs: '100%', sm: 'auto' }
             }}
           >
             Cancel
@@ -400,6 +416,7 @@ export const Products = () => {
               px: 4,
               borderRadius: 1.5,
               boxShadow: 'none',
+              width: { xs: '100%', sm: 'auto' }
             }}
           >
             {isEditMode ? 'Update Product' : 'Add Product'}

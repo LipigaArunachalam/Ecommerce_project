@@ -10,12 +10,15 @@ import {
   DialogContent,
   DialogContentText,
   TextField,
+  Container,
   DialogActions,
   IconButton,
   Tooltip,
   Typography,
   alpha,
+  useMediaQuery,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import {
@@ -173,8 +176,9 @@ export const Sellers = () => {
         open={open} 
         onClose={handleClose} 
         fullWidth 
-        maxWidth="sm"
-        PaperProps={{ sx: { borderRadius: 3, p: 1 } }}
+        maxWidth="xs"
+        fullScreen={useMediaQuery(useTheme().breakpoints.down('sm'))}
+        PaperProps={{ sx: { borderRadius: { xs: 0, sm: 3 }, p: 1 } }}
       >
         <DialogTitle sx={{ fontWeight: 800, textAlign: 'center', fontSize: '1.5rem', py: 3 }}>
           Add New Seller
@@ -219,19 +223,19 @@ export const Sellers = () => {
             error={!!errors.password}
             helperText={errors.password?.message}
           />
-          <Box display="flex" gap={2}>
+          <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={2}>
             <TextField label="City" fullWidth {...register('city')} />
             <TextField label="State" fullWidth {...register('state')} />
           </Box>
           <TextField label="Zipcode" fullWidth {...register('zip_code')} />
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 4, pt: 1 }}>
+        <DialogActions sx={{ px: 3, pb: 4, pt: 1, flexDirection: { xs: 'column-reverse', sm: 'row' }, gap: { xs: 2, sm: 0 } }}>
           <Button 
             onClick={handleClose}
             variant="outlined"
             size="large"
             color="inherit"
-            sx={{ textTransform: 'none', fontWeight: 700, px: 4, borderRadius: 1.5 }}
+            sx={{marginLeft:{xs:1}, textTransform: 'none', fontWeight: 700, px: 4, borderRadius: 1.5, width: { xs: '100%', sm: 'auto' } }}
           >
             Cancel
           </Button>
@@ -240,7 +244,7 @@ export const Sellers = () => {
             size="large"
             onClick={handleSubmit(onAddSellerSubmit)} 
             disabled={isAdding}
-            sx={{ textTransform: 'none', fontWeight: 700, px: 4, borderRadius: 1.5, boxShadow: 'none' }}
+            sx={{ textTransform: 'none', fontWeight: 700, px: 4, borderRadius: 1.5, boxShadow: 'none', width: { xs: '100%', sm: 'auto' } }}
           >
             {isAdding ? 'Adding...' : 'Confirm'}
           </Button>

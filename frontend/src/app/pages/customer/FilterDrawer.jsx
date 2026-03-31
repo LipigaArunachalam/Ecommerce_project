@@ -29,7 +29,7 @@ export const FilterDrawer = ({ open, onClose, onFilterChange, currentFilter }) =
       open={open}
       onClose={onClose}
       PaperProps={{
-        sx: { width: 300, p: 3 },
+        sx: { width: { xs: '100%', sm: 300 }, p: 3 },
       }}
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
