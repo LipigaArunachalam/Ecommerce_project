@@ -16,18 +16,6 @@ export class Product extends Document {
   @Prop()
   product_qty: number;
 
-  @Prop()
-  product_weight_g: number;
-
-  @Prop()
-  product_length_cm: number;
-
-  @Prop()
-  product_height_cm: number;
-
-  @Prop()
-  product_width_cm: number;
-
   @Prop({default:false, select : false})
   is_deleted : boolean;
 

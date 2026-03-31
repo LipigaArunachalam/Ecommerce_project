@@ -13,6 +13,7 @@ import { NotFoundException, BadRequestException } from '@nestjs/common';
 import dayjs from 'dayjs';
 import { ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { MailService } from 'src/mail/mail.service';
+import * as bcrypt from 'bcrypt';
 
 
 
@@ -153,7 +154,7 @@ export class UserService {
             product_id,
             seller_id: product.seller_id,
             price: product.price,
-            freight_value: 10,
+            freight_value:  Math.max(10, Math.min(25, product.price * 0.03)),
             shipping_limit_date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
             address: finalAddress,
             is_deleted: false
@@ -355,28 +356,55 @@ export class UserService {
 
     async updateUser(uid: string, body: any) {
         try {
-            if(body.data.email){
-                const user = await this.UserModel.findOne({ email: body.data.email,user_id: { $ne: uid } });
-                if (user) {
+            if (body.data.email) {
+                const userExists = await this.UserModel.findOne({ email: body.data.email, user_id: { $ne: uid } });
+                if (userExists) {
                     throw new ConflictException("Email already exists");
                 }
             }
-            const user = await this.UserModel.findOneAndUpdate({ user_id: uid }, { $set: { ...body.data } }, { returnDocument: 'after' });
-            if (!user) {
+
+            const updateData: any = { ...body.data };
+
+            if (body.data.currentPassword && body.data.newPassword) {
+                const user = await this.UserModel.findOne({ user_id: uid });
+                if (!user) {
+                    throw new NotFoundException("User not found");
+                }
+
+                const isMatch = await bcrypt.compare(body.data.currentPassword, user.password);
+                if (!isMatch) {
+                    throw new BadRequestException("Current password is incorrect");
+                }
+                console.log(updateData)
+                const hashedNewPassword = await bcrypt.hash(body.data.newPassword, 10);
+                updateData.password = hashedNewPassword;
+                
+                delete updateData.currentPassword;
+                delete updateData.newPassword;
+            }
+            console.log(updateData)
+            const updatedUser = await this.UserModel.findOneAndUpdate(
+                { user_id: uid }, 
+                { $set: updateData }, 
+                { returnDocument: 'after' }
+            );
+
+            if (!updatedUser) {
                 throw new NotFoundException("User not found");
             }
-            return user;
+            return updatedUser;
 
         } catch (error) {
-            if (error.status === 409) {
-                throw new ConflictException("Email already exists");
+            if (error instanceof ConflictException || error instanceof BadRequestException || error instanceof NotFoundException) {
+                throw error;
             }
-
+            console.error("Profile update error:", error);
             throw new InternalServerErrorException("Failed to update profile");
         }
     }
 
     async addAddress(uid: string, data: any) {
+        console.log(data)
         return await this.UserModel.findOneAndUpdate(
             { user_id: uid },
             { $push: { addresses: data } },
@@ -506,7 +534,7 @@ export class UserService {
                 product_id: item.product_id,
                 seller_id: product.seller_id,
                 price: product.price,
-                freight_value: 10,
+                freight_value: Math.max(10, Math.min(25, product.price * 0.03)),
                 shipping_limit_date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
                 address: finalAddress,
                 is_deleted: false

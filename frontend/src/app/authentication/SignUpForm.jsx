@@ -6,7 +6,10 @@ import {
   Typography,
   Stack,
   Link as MuiLink,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { SnackBar, useSignupMutation } from '../../shared';
 import { StyledCard, StyledTextField, AuthButton } from '../../shared/styled-components/StyledComponents';
 
@@ -22,6 +25,9 @@ export const SignUpForm = () => {
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
   const [snackSeverity, setSnackSeverity] = useState('error');
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [signup, { isLoading: signupLoading }] = useSignupMutation();
 
@@ -97,22 +103,46 @@ export const SignUpForm = () => {
 
             <StyledTextField
               label="Password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               variant="outlined"
               fullWidth
               {...register('password', { required: 'Password is required' , minLength : {value:5 ,message:'Minimum 5 characters'}})}
               error={!!errors.password}
               helperText={errors.password?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
 
             <StyledTextField
               label="Confirm Password"
-              type="password"
+              type={showConfirmPassword ? 'text' : 'password'}
               variant="outlined"
               fullWidth
               {...register('confirmPassword', { required: 'Confirm Password is required' })}
               error={!!errors.confirmPassword}
               helperText={errors.confirmPassword?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
 
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>

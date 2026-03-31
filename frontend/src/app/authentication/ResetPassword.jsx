@@ -10,7 +10,10 @@ import {
   Button,
   Link as MuiLink,
   TextField,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { SnackBar, useResetPasswordMutation } from '../../shared';
 import { StyledCard, StyledTextField, AuthButton } from '../../shared/styled-components/StyledComponents';
 
@@ -25,6 +28,11 @@ export const ResetPassword = () => {
   const [snackMessage, setSnackMessage] = useState('');
   const [snackSeverity, setSnackSeverity] = useState('error');
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // const [error,setError] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -34,8 +42,14 @@ export const ResetPassword = () => {
   const [resetPassword, { isLoading: resetPasswordLoading }] = useResetPasswordMutation();
 
   const handleReset = async (data) => {
+    if (data.newPassword !== data.confirmPassword) {
+      setSnackMessage('Passwords do not match');
+      setSnackSeverity('error');
+      setSnackOpen(true);
+      return;
+    }
     try {
-      await resetPassword({ email, newPassword: data.newPassword, token }).unwrap();
+      const res = await resetPassword({ email, newPassword: data.newPassword, token });
 
       setSnackMessage('Password reset successfully');
       setSnackSeverity('success');
@@ -53,28 +67,62 @@ export const ResetPassword = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 7, px: 2 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 7 }}>
       <StyledCard sx={{ width: '100%', maxWidth: 480 }}>
-        <Typography variant="h3" align="center" color="primary.main" fontWeight={800} gutterBottom>
-          Reset Password
-        </Typography>
-        <Typography variant="body2" align="center" color="text.secondary" sx={{ mb: 4 }}>
-          Enter your new password below to reset your account.
-        </Typography>
-        <form onSubmit={handleSubmit(handleReset)}>
-          <Stack spacing={3}>
-            <StyledTextField
-              type="password"
-              label="New Password"
-              variant="outlined"
-              fullWidth
-              {...register('newPassword', { 
-                required: 'Password is required',
-                minLength: { value: 5, message: 'Minimum 5 characters' }
-              })}
-              error={!!errors.newPassword}
-              helperText={errors.newPassword?.message}
-            />
+        <CardContent>
+          <Typography variant="h4" align="center" fontWeight="bold">
+            RESET PASSWORD
+          </Typography>
+          <form onSubmit={handleSubmit(handleReset)}>
+            <Stack spacing={3} sx={{ mt: 2 }}>
+              {/* {error && <p className="error">{error}</p>} */}
+
+              <TextField
+                type={showPassword ? 'text' : 'password'}
+                label="New Password"
+                variant="outlined"
+                fullWidth
+                placeholder="Enter new password"
+                {...register('newPassword', { required: 'password is needed' })}
+                error={!!errors.newPassword}
+                helperText={errors.newPassword?.message}
+                sx={textStyle}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                type={showConfirmPassword ? 'text' : 'password'}
+                label="Confirm Password"
+                variant="outlined"
+                fullWidth
+                placeholder="Confirm new password"
+                {...register('confirmPassword', { required: 'confirmation is needed' })}
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword?.message}
+                sx={textStyle}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
             <AuthButton
               variant="contained"
@@ -102,6 +150,7 @@ export const ResetPassword = () => {
             </Box>
           </Stack>
         </form>
+        </CardContent>
       </StyledCard>
       <SnackBar
         open={snackOpen}

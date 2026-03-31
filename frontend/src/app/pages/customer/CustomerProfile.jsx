@@ -8,7 +8,7 @@ import {
   SnackBar,
   ProfileLayout,
 } from '../../../shared';
-import { Email, LocationOn, Home, Map } from '@mui/icons-material';
+import { Email, LocationOn, Home, Map, Visibility, VisibilityOff } from '@mui/icons-material';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { BarChart } from '@mui/x-charts/BarChart';
 import {
@@ -23,6 +23,8 @@ import {
   Button,
   TextField,
   useMediaQuery,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { DeleteDialog } from '../../../shared';
@@ -35,8 +37,8 @@ export const CustomerProfile = () => {
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
   const [snackSeverity, setSnackSeverity] = useState('success');
-  const [isDeleteDialogOpen,setIsDeleteDialogOpen]=useState(false);
-  const [deleteAddressId, setDeleteAddressId] =useState('');
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [deleteAddressId, setDeleteAddressId] = useState('');
 
   const lastAddress = data?.addresses?.[data.addresses.length - 1];
   const addressDisplay = lastAddress
@@ -66,11 +68,18 @@ export const CustomerProfile = () => {
 
   const [formData, setFormData] = useState({
     email: '',
+    currentPassword: '',
+    newPassword: '',
   });
+
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   const handleEditOpen = () => {
     setFormData({
       email: data?.email || '',
+      currentPassword: '',
+      newPassword: '',
     });
 
     setOpenEdit(true);
@@ -123,9 +132,9 @@ export const CustomerProfile = () => {
     }
   };
 
-  const handleRemove = async(id)=>{
-      setDeleteAddressId(id)
-      setIsDeleteDialogOpen(true)
+  const handleRemove = async (id) => {
+    setDeleteAddressId(id)
+    setIsDeleteDialogOpen(true)
   }
 
   const handleDeleteAddress = async () => {
@@ -148,23 +157,39 @@ export const CustomerProfile = () => {
   const handleSubmit = async () => {
     try {
       const uid = localStorage.getItem('user_id');
-      console.log(formData);
-      if (
-        newAddress.address_line == '' ||
-        newAddress.city == '' ||
-        newAddress.state == '' ||
-        newAddress.zip_code == ''
-      ) {
-        setSnackMessage('Fill all the feilds');
+      
+      const { address_line, city, state, zip_code } = newAddress;
+      const isAnyAddressFieldFilled = Boolean(address_line || city || state || zip_code);
+      const isAllAddressFieldsFilled = Boolean(address_line && city && state && zip_code);
+
+      const hasEmailChanged = formData.email !== (data?.email || '');
+      const isPasswordChangeAttempted = Boolean(formData.currentPassword && formData.newPassword);
+
+      if (!hasEmailChanged && !isPasswordChangeAttempted && !isAnyAddressFieldFilled) {
+        setSnackMessage('No data entered to save');
+        setSnackSeverity('info');
+        setSnackOpen(true);
+        return;
+      }
+
+      if (isAnyAddressFieldFilled && !isAllAddressFieldsFilled) {
+        setSnackMessage('Please fill all address fields');
         setSnackSeverity('error');
         setSnackOpen(true);
         return;
       }
+
+      const updatedAddresses = isAllAddressFieldsFilled 
+        ? [...data.addresses, newAddress] 
+        : data.addresses;
+
       await editProfile({
         uid: uid,
         data: {
           email: formData.email,
-          addresses: [...data.addresses, newAddress],
+          addresses: updatedAddresses,
+          currentPassword: formData.currentPassword,
+          newPassword: formData.newPassword,
         },
       }).unwrap();
       setNewAddress({
@@ -216,6 +241,48 @@ export const CustomerProfile = () => {
             sx={{mt:2}}
           />
 
+          <TextField
+            label="Current Password"
+            name="currentPassword"
+            type={showCurrentPassword ? 'text' : 'password'}
+            value={formData.currentPassword}
+            onChange={handleChange}
+            fullWidth
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                    edge="end"
+                  >
+                    {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <TextField
+            label="New Password"
+            name="newPassword"
+            type={showNewPassword ? 'text' : 'password'}
+            value={formData.newPassword}
+            onChange={handleChange}
+            fullWidth
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    edge="end"
+                  >
+                    {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+
           <Typography variant="h6" sx={{ mt: 2 }}>
             Addresses
           </Typography>
@@ -229,13 +296,25 @@ export const CustomerProfile = () => {
                 border: '1px solid',
                 borderColor: 'divider',
                 borderRadius: 2,
+                position: 'relative',
               }}
             >
               <Typography variant="body2">
                 {addr.address_line}, {addr.city}, {addr.state} - {addr.zip_code}
               </Typography>
 
-              <Button size="small" color="error" onClick={() => handleRemove(addr._id)}>
+              <Button
+                size="small"
+                color="error"
+                onClick={() => handleRemove(addr._id)}
+                sx={{
+                  position: 'absolute', 
+                  top: 8,
+                  right: 8,
+                  minWidth: 'auto',
+                  padding: '2px 6px',
+                }}
+              >
                 Delete
               </Button>
             </Box>
@@ -421,14 +500,14 @@ export const CustomerProfile = () => {
       />
 
       <DeleteDialog
-              open={isDeleteDialogOpen}
-              onClose={() => setIsDeleteDialogOpen(false)}
-              onConfirm={handleDeleteAddress}
-              title="Remove Address"
-              description="Are you sure you want to remove this address?"
-              confirmText="Remove"
-              cancelText="Cancel"
-            />
+        open={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDeleteAddress}
+        title="Remove Address"
+        description="Are you sure you want to remove this address?"
+        confirmText="Remove"
+        cancelText="Cancel"
+      />
     </Box>
   );
 };

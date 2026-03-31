@@ -66,10 +66,8 @@ export const Products = () => {
     reset({
       product_category_name: '',
       product_name: '',
-      product_weight_g: '',
-      product_height_cm: '',
-      product_length_cm: '',
-      product_width_cm: '',
+      price: '',
+      product_qty: '',
     });
     setOpen(true);
   };
@@ -119,18 +117,6 @@ export const Products = () => {
           ₹{Number(row.price).toLocaleString()}
         </Typography>
       ),
-    },
-    {
-      key: 'product_weight_g',
-      label: 'Weight',
-    },
-    {
-      key: 'product_height_cm',
-      label: 'Height',
-    },
-    {
-      key: 'product_width_cm',
-      label: 'Width',
     },
     {
       key: 'product_qty',
@@ -350,43 +336,6 @@ export const Products = () => {
               helperText={errors.product_qty?.message}
             />
 
-            <TextField
-              label="Weight (g)"
-              type="number"
-              fullWidth
-              {...register('product_weight_g', { required: 'Weight is required' })}
-              error={!!errors.product_weight_g}
-              helperText={errors.product_weight_g?.message}
-            />
-
-            <TextField
-              label="Height (cm)"
-              type="number"
-              fullWidth
-              {...register('product_height_cm', { required: 'Height is required' })}
-              error={!!errors.product_height_cm}
-              helperText={errors.product_height_cm?.message}
-            />
-
-            <TextField
-              label="Length (cm)"
-              type="number"
-              fullWidth
-              {...register('product_length_cm', { required: 'Length is required' })}
-              error={!!errors.product_length_cm}
-              helperText={errors.product_length_cm?.message}
-            />
-
-            <TextField
-              label="Width (cm)"
-              type="number"
-              fullWidth
-              {...register('product_width_cm', { required: 'Width is required' })}
-              error={!!errors.product_width_cm}
-              helperText={errors.product_width_cm?.message}
-            />
-
-            {/* IMAGE SECTION */}
             <Box sx={{ gridColumn: 'span 2', mt: 1 }}>
               <Typography
                 variant="subtitle2"
